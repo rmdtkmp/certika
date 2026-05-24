@@ -80,7 +80,7 @@ export function CSVUploader({ onQuestionsLoaded }: CSVUploaderProps) {
   }, [parseCSV])
 
   return (
-    <Card className="w-full max-w-2xl mx-auto border-2 border-dashed border-muted-foreground/25 bg-card/50">
+    <Card className="w-full border-2 border-dashed border-muted-foreground/25 bg-card/50">
       <CardHeader className="text-center">
         <CardTitle className="flex items-center justify-center gap-2 text-2xl">
           <FileSpreadsheet className="h-7 w-7 text-primary" />

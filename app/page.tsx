@@ -78,7 +78,7 @@ export default function CertikaApp() {
       </header>
 
       {/* Main Content */}
-      <main className={`px-4 py-8 mx-auto ${state === 'exam' ? 'max-w-[1400px]' : 'container'}`}>
+      <main className="max-w-[1400px] w-full px-4 py-8 mx-auto">
         {state === 'upload' && (
           <div className="space-y-12">
             {/* Hero Section */}
@@ -99,7 +99,7 @@ export default function CertikaApp() {
             <CSVUploader onQuestionsLoaded={handleQuestionsLoaded} />
 
             {/* Features */}
-            <div className="grid gap-6 md:grid-cols-3 max-w-4xl mx-auto">
+            <div className="grid gap-6 md:grid-cols-3">
               <Card className="bg-card/50">
                 <CardContent className="pt-6 text-center">
                   <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
