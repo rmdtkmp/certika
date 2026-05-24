@@ -119,10 +119,10 @@ export function ExamEngine({ questions, onComplete, examDuration = 120 }: ExamEn
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
-      {/* Header with timer and progress */}
+    <div className="w-full max-w-[1400px] mx-auto space-y-4">
+      {/* Header bar — full width */}
       <Card className="bg-card/80 backdrop-blur">
-        <CardContent className="py-4">
+        <CardContent className="py-3">
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
               <Clock className={`h-5 w-5 ${getTimeColor()}`} />
@@ -153,127 +153,169 @@ export function ExamEngine({ questions, onComplete, examDuration = 120 }: ExamEn
         </CardContent>
       </Card>
 
-      {/* Question Card */}
-      <Card className="min-h-[500px] flex flex-col">
-        <CardHeader className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Badge variant="outline" className="text-xs">
-              {currentQuestion.category}
-            </Badge>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleFlag}
-              className={flagged.has(currentQuestion.id) ? 'text-amber-500' : ''}
-            >
-              <Flag className="h-4 w-4 mr-1" />
-              {flagged.has(currentQuestion.id) ? 'Flagged' : 'Flag'}
-            </Button>
-          </div>
-          
-          <div className="space-y-2">
-            <span className="text-sm font-medium text-muted-foreground">
-              Question {currentIndex + 1}
-            </span>
-            <p className="text-lg leading-relaxed">{currentQuestion.question_text}</p>
-          </div>
-        </CardHeader>
+      {/* Two-column body */}
+      <div className="flex gap-4 items-start">
 
-        <CardContent className="flex-1">
-          <div className="grid gap-3">
-            {options.map(({ key, value }) => {
-              const isSelected = answers[currentQuestion.id] === key
-              return (
-                <button
-                  key={key}
-                  onClick={() => handleAnswer(currentQuestion.id, key)}
-                  className={`
-                    w-full p-4 rounded-xl border-2 text-left transition-all duration-200
-                    hover:border-primary/50 hover:bg-primary/5
-                    ${isSelected 
-                      ? 'border-primary bg-primary/10 ring-2 ring-primary/20' 
-                      : 'border-border bg-card'
-                    }
-                  `}
+        {/* Left column — Question (flex-1, takes remaining space) */}
+        <div className="flex-1 min-w-0">
+          <Card className="flex flex-col">
+            <CardHeader className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Badge variant="outline" className="text-xs">
+                  {currentQuestion.category}
+                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleFlag}
+                  className={flagged.has(currentQuestion.id) ? 'text-amber-500' : ''}
                 >
-                  <div className="flex items-start gap-3">
-                    <span className={`
-                      flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center
-                      font-semibold text-sm transition-colors
-                      ${isSelected 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'bg-muted text-muted-foreground'
-                      }
-                    `}>
-                      {key}
-                    </span>
-                    <span className="pt-1">{value}</span>
-                  </div>
-                </button>
-              )
-            })}
-          </div>
-        </CardContent>
+                  <Flag className="h-4 w-4 mr-1" />
+                  {flagged.has(currentQuestion.id) ? 'Flagged' : 'Flag'}
+                </Button>
+              </div>
 
-        <CardFooter className="border-t bg-muted/30 justify-between">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
-            disabled={currentIndex === 0}
-          >
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            Previous
-          </Button>
+              <div className="space-y-2">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Question {currentIndex + 1}
+                </span>
+                <p className="text-base leading-relaxed">{currentQuestion.question_text}</p>
+              </div>
+            </CardHeader>
 
-          <div className="flex gap-2">
-            {currentIndex === questions.length - 1 ? (
-              <Button onClick={() => setShowConfirm(true)} className="bg-primary">
-                <CheckCircle2 className="h-4 w-4 mr-1" />
-                Submit Exam
-              </Button>
-            ) : (
+            <CardContent className="flex-1">
+              <div className="grid gap-3">
+                {options.map(({ key, value }) => {
+                  const isSelected = answers[currentQuestion.id] === key
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => handleAnswer(currentQuestion.id, key)}
+                      className={`
+                        w-full p-4 rounded-xl border-2 text-left transition-all duration-200
+                        hover:border-primary/50 hover:bg-primary/5
+                        ${isSelected
+                          ? 'border-primary bg-primary/10 ring-2 ring-primary/20'
+                          : 'border-border bg-card'
+                        }
+                      `}
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className={`
+                          flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center
+                          font-semibold text-sm transition-colors
+                          ${isSelected
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground'
+                          }
+                        `}>
+                          {key}
+                        </span>
+                        <span className="pt-1 leading-relaxed">{value}</span>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </CardContent>
+
+            <CardFooter className="border-t bg-muted/30 justify-between">
               <Button
-                onClick={() => setCurrentIndex(Math.min(questions.length - 1, currentIndex + 1))}
+                variant="outline"
+                onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
+                disabled={currentIndex === 0}
               >
-                Next
-                <ChevronRight className="h-4 w-4 ml-1" />
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Previous
               </Button>
-            )}
-          </div>
-        </CardFooter>
-      </Card>
 
-      {/* Question Navigator */}
-      <Card>
-        <CardContent className="py-4">
-          <p className="text-sm font-medium text-muted-foreground mb-3">Question Navigator</p>
-          <div className="flex flex-wrap gap-2">
-            {questions.map((q, idx) => {
-              const isAnswered = answers[q.id] !== undefined
-              const isFlagged = flagged.has(q.id)
-              const isCurrent = idx === currentIndex
-              
-              return (
-                <button
-                  key={q.id}
-                  onClick={() => setCurrentIndex(idx)}
-                  className={`
-                    w-10 h-10 rounded-lg text-sm font-medium transition-all
-                    ${isCurrent ? 'ring-2 ring-primary ring-offset-2' : ''}
-                    ${isAnswered 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                    }
-                    ${isFlagged ? 'ring-2 ring-amber-500 ring-offset-1' : ''}
-                  `}
+              <div className="flex gap-2">
+                {currentIndex === questions.length - 1 ? (
+                  <Button onClick={() => setShowConfirm(true)}>
+                    <CheckCircle2 className="h-4 w-4 mr-1" />
+                    Submit Exam
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => setCurrentIndex(Math.min(questions.length - 1, currentIndex + 1))}
+                  >
+                    Next
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                )}
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+
+        {/* Right column — Navigator (fixed width sidebar) */}
+        <div className="w-64 flex-shrink-0">
+          <Card className="sticky top-4">
+            <CardContent className="py-4">
+              <p className="text-sm font-semibold mb-1">Question Navigator</p>
+              <p className="text-xs text-muted-foreground mb-4">
+                {answeredCount} of {questions.length} answered
+              </p>
+
+              {/* Legend */}
+              <div className="flex flex-wrap gap-x-4 gap-y-1 mb-4 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded-sm bg-primary inline-block" />
+                  Answered
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded-sm bg-muted inline-block" />
+                  Unanswered
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded-sm ring-2 ring-amber-500 inline-block" />
+                  Flagged
+                </span>
+              </div>
+
+              <div className="grid grid-cols-5 gap-1.5">
+                {questions.map((q, idx) => {
+                  const isAnswered = answers[q.id] !== undefined
+                  const isFlagged = flagged.has(q.id)
+                  const isCurrent = idx === currentIndex
+
+                  return (
+                    <button
+                      key={q.id}
+                      onClick={() => setCurrentIndex(idx)}
+                      title={`Q${idx + 1}${isFlagged ? ' (flagged)' : ''}${isAnswered ? ' (answered)' : ''}`}
+                      className={`
+                        h-9 rounded-lg text-xs font-medium transition-all
+                        ${isCurrent ? 'ring-2 ring-primary ring-offset-1 scale-105' : ''}
+                        ${isAnswered
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted text-muted-foreground hover:bg-muted/60'
+                        }
+                        ${isFlagged ? 'ring-2 ring-amber-500 ring-offset-1' : ''}
+                      `}
+                    >
+                      {idx + 1}
+                    </button>
+                  )
+                })}
+              </div>
+
+              <div className="mt-5 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full text-xs"
+                  onClick={() => setShowConfirm(true)}
                 >
-                  {idx + 1}
-                </button>
-              )
-            })}
-          </div>
-        </CardContent>
-      </Card>
+                  <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" />
+                  Submit Exam
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+      </div>
 
       {/* Confirmation Dialog */}
       {showConfirm && (
@@ -288,12 +330,12 @@ export function ExamEngine({ questions, onComplete, examDuration = 120 }: ExamEn
               </p>
               {answeredCount < questions.length && (
                 <p className="text-amber-500 text-sm">
-                  ⚠️ You have {questions.length - answeredCount} unanswered questions.
+                  You have {questions.length - answeredCount} unanswered questions.
                 </p>
               )}
               {flagged.size > 0 && (
                 <p className="text-amber-500 text-sm">
-                  ⚠️ You have {flagged.size} flagged questions for review.
+                  You have {flagged.size} flagged questions for review.
                 </p>
               )}
             </CardContent>

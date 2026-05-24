@@ -78,7 +78,7 @@ export default function CertikaApp() {
       </header>
 
       {/* Main Content */}
-      <main className="container px-4 py-8 mx-auto">
+      <main className={`px-4 py-8 mx-auto ${state === 'exam' ? 'max-w-[1400px]' : 'container'}`}>
         {state === 'upload' && (
           <div className="space-y-12">
             {/* Hero Section */}
